@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Box,
   Button,
   Container,
   Flex,
@@ -17,14 +18,18 @@ import {
   FiEdit3
 } from 'react-icons/fi';
 import {
-  MdDelete
+  MdDelete,
+  MdSave
 } from 'react-icons/md';
 
 export default function Home() {
 
   const [data, setData] = useState([]);
   const [visibility, setVisibility] = useState('hidden');
-  const [readOnly, setReadOnly] = useState(true);
+  const [readOnlyName, setReadOnlyName] = useState(true);
+
+  const [id, setId] = useState();
+  const [name, setName] = useState();
 
   function listAll() {
 
@@ -62,9 +67,16 @@ export default function Home() {
   }
 
   function edit(id, name) {
+    setId(id);
+    setName(name);
+  }
 
-    setReadOnly(false);
+  function reply_click(clicked_id)
+  {
+      alert(clicked_id);
+  }
 
+  function save() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -82,9 +94,10 @@ export default function Home() {
       redirect: "follow",
     };
 
-    fetch("/api/nuvemshop-getAll", requestOptions)
+    fetch("/api/nuvemshop-put", requestOptions)
       .then(response => response.json())
       .then(result => {
+
         console.log(result);
       })
       .catch(error => {
@@ -114,7 +127,8 @@ export default function Home() {
           visibility={visibility}>
           <Table variant='striped'>
             {data.map((item, idx) => (
-              <>
+              <Box
+                key={idx}>
                 <Thead>
                   <Tr>
                     <Th>ID</Th>
@@ -123,34 +137,37 @@ export default function Home() {
                     <Th>SEO Title</Th>
                     <Th>Edit</Th>
                     <Th>Delete</Th>
+                    <Th>Salvar</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   <Tr>
                     <Td>
                       <Input
+                        id={item.id}
                         defaultValue={item.id}
-                        readOnly={readOnly} />
+                        onClick={reply_click(this.id)}
+                        readOnly />
                     </Td>
                     <Td>
                       <Input
                         defaultValue={item.name.pt}
-                        readOnly={readOnly} />
+                        readOnly />
                     </Td>
                     <Td>
                       <Input
                         defaultValue={item.seo_description.pt}
-                        readOnly={readOnly} />
+                        readOnly />
                     </Td>
                     <Td>
                       <Input
                         defaultValue={item.seo_title.pt}
-                        readOnly={readOnly} />
+                        readOnly />
                     </Td>
                     <Td>
                       <Button>
-                        <FiEdit3
-                          onClick={edit(item.id, item.name.pt)} />
+                        {/* <FiEdit3
+                          onClick={edit(item.id, item.name.pt)} /> */}
                       </Button>
                     </Td>
                     <Td>
@@ -158,9 +175,14 @@ export default function Home() {
                         <MdDelete />
                       </Button>
                     </Td>
+                    <Td>
+                      <Button>
+                        {/* <MdSave onClick={save} /> */}
+                      </Button>
+                    </Td>
                   </Tr>
                 </Tbody>
-              </>
+              </Box>
             ))}
           </Table>
         </TableContainer>
