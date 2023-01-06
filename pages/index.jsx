@@ -18,8 +18,9 @@ import {
   Tr
 } from "@chakra-ui/react";
 import {
-  MdSave
+  MdSave, MdSubtitles
 } from 'react-icons/md';
+import $ from 'jquery';
 
 export default function Home() {
 
@@ -214,94 +215,116 @@ export default function Home() {
   }
 
   function gerarTitleEDescription() {
-    const palavraChave = document.querySelector(".palavra-chave").value;
-    const tipo = document.querySelector("#select-tipo").value;
+    const tipo = 'Loja';
 
-    const tituloSugerido = document.querySelector("#h1-textarea");
-    const titleTextArea = document.querySelector("#title-textarea");
-    const descriptionTextArea = document.querySelector("#description-textarea");
+    const { title, description } = SEOContent[tipo](name);
 
-    console.log(palavraChave, tipo);
-
-    const { title, description } = SEOContent[tipo](palavraChave);
-
-    titleTextArea.value = title;
-    tituloSugerido.value = title;
-    descriptionTextArea.value = description;
+    setSeoTitle(title);
+    setSeoDescription(description);
   }
 
   return (
     <Container
       py='6'
       my='10'
-      maxW={'8xl'}>
-      <Flex
-        flexDir={'column'}
+      maxW={'full'}>
+      <Grid
+        templateColumns={'repeat(1,1fr)'}
         gap='4'>
-        <Heading>
-          Nuvemshop API
-        </Heading>
-        <Text>
-          Products
-        </Text>
-        <Button
-          onClick={listAll}>
-          List All
-        </Button>
-        <TableContainer
-          visibility={visibility}>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Name</Th>
-                <Th>SEO Description</Th>
-                <Th>SEO Title</Th>
-                <Th>Save</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.map((item, idx) => (
-                <Tr
-                  key={idx}
-                  _hover={{
-                    bg: '#FFADBC'
-                  }}>
-                  <Td>
-                    <Input
-                      defaultValue={item.id} />
-                  </Td>
-                  <Td>
-                    <Input
-                      id={item.id}
-                      onClick={getNameId}
-                      defaultValue={item.name.pt} />
-                  </Td>
-                  <Td>
-                    <Input
-                      defaultValue={item.seo_description.pt}
-                      onClick={getDescription} />
-                  </Td>
-                  <Td>
-                    <Input
-                      defaultValue={item.seo_title.pt}
-                      onClick={getTitle} />
-                  </Td>
-                  <Td>
-                    <Button>
-                      <MdSave onClick={save} />
-                    </Button>
-                  </Td>
+        <Flex
+          flexDir={'column'}
+          gap='6'
+          boxShadow='lg'
+          p='4'
+          borderRadius={'lg'}>
+          <Heading
+            color='#863A6F'>
+            Nuvemshop API
+          </Heading>
+          <Flex
+            align={'center'}
+            justifyContent='space-between'>
+            <Text>
+              Products
+            </Text>
+            <Button
+              onClick={listAll}
+              bg='#D989B5'
+              color='white'
+              _hover={{
+                bg: '#FFADBC'
+              }}>
+              List All
+            </Button>
+          </Flex>
+          <TableContainer
+            visibility={visibility}>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>SEO Title</Th>
+                  <Th>SEO Description</Th>
+                  <Th>Generate</Th>
+                  <Th>Save</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {data.map((item, idx) => (
+                  <Tr
+                    key={idx}
+                    _hover={{
+                      bg: '#FFADBC'
+                    }}>
+                    <Td>
+                      <Input
+                        id={item.id}
+                        onChange={e => {
+                          setName(e.target.value),
+                          setId(e.target.id)
+                        }}
+                        defaultValue={item.name.pt} />
+                    </Td>
+                    <Td>
+                      <Input
+                        onChange={e => {
+                          setSeoTitle(e.target.value)
+                        }}
+                        defaultValue={item.seo_title.pt} />
+                    </Td>
+                    <Td>
+                      <Input
+                        onChange={e => {
+                          setSeoDescription(e.target.value)
+                        }}
+                        defaultValue={item.seo_description.pt} />
+                    </Td>
+                    <Td>
+                      <Button>
+                        <MdSubtitles
+                          onClick={gerarTitleEDescription} />
+                      </Button>
+                    </Td>
+                    <Td>
+                      <Button>
+                        <MdSave onClick={save} />
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Flex>
         {/* <Flex
           flexDir={'column'}
-          gap='6'>
-          <Heading>
-            Generator
+          gap='6'
+          boxShadow='lg'
+          borderRadius={'lg'}
+          p='4'>
+          <Heading
+          color='#863A6F'>
+            Title Description Generator
           </Heading>
           <FormControl
             className='form'>
@@ -311,7 +334,8 @@ export default function Home() {
               }}
               gap='4'>
               <Input
-                className='palavra-chave' />
+                className='palavra-chave'
+                value={name} />
               <Select
                 id='select-tipo'
                 name='tipo'>
@@ -333,9 +357,10 @@ export default function Home() {
               </Select>
               <Button
                 onClick={gerarTitleEDescription}
-                variant='button-orange'
+                bg='#D989B5'
+                color='white'
                 _hover={{
-                  bg: '#FFB596'
+                  bg: '#FFADBC'
                 }}>
                 Generade
               </Button>
@@ -356,7 +381,7 @@ export default function Home() {
               id={'description-textarea'} />
           </Flex>
         </Flex> */}
-      </Flex>
+      </Grid>
     </Container>
   )
 }
