@@ -5,6 +5,9 @@ export default function handler(req, res) {
 
   var data = JSON.stringify({
     name: user.name,
+    description: user.description,
+    seo_title: user.seo_title,
+    seo_description: user.seo_description,
   });
 
   var config = {

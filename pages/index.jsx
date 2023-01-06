@@ -28,6 +28,8 @@ export default function Home() {
 
   const [id, setId] = useState();
   const [name, setName] = useState();
+  const [seoTitle, setSeoTitle] = useState();
+  const [seoDescription, setSeoDescription] = useState();
 
   function listAll() {
 
@@ -71,7 +73,10 @@ export default function Home() {
     var raw = JSON.stringify({
       user: {
         id: id,
-        name: name
+        name: name,
+        description: seoDescription,
+        seo_title: seoTitle,
+        seo_description: seoDescription
       }
     });
 
@@ -92,9 +97,24 @@ export default function Home() {
       })
   }
 
-  function getId(e) {
+  function getNameId(e) {
     setId(e.target.id);
     setName(e.target.value);
+
+    console.log(id);
+    console.log(name);
+  }
+
+  function getTitle(e) {
+    setSeoTitle(e.target.value);
+
+    console.log(seoTitle);
+  }
+
+  function getDescription(e) {
+    setSeoDescription(e.target.value);
+
+    console.log(seoDescription);
   }
 
   function randomInt(min, max) {
@@ -212,7 +232,7 @@ export default function Home() {
 
   return (
     <Container
-      py='10'
+      py='6'
       my='10'
       maxW={'8xl'}>
       <Flex
@@ -240,30 +260,32 @@ export default function Home() {
                 <Th>Save</Th>
               </Tr>
             </Thead>
-            {data.map((item, idx) => (
-              <Tbody
-                key={idx}>
-                <Tr>
+            <Tbody>
+              {data.map((item, idx) => (
+                <Tr
+                  key={idx}
+                  _hover={{
+                    bg: '#FFADBC'
+                  }}>
                   <Td>
                     <Input
-                      defaultValue={item.id}
-                      readOnly />
+                      defaultValue={item.id} />
                   </Td>
                   <Td>
                     <Input
                       id={item.id}
-                      onClick={getId}
+                      onClick={getNameId}
                       defaultValue={item.name.pt} />
                   </Td>
                   <Td>
                     <Input
                       defaultValue={item.seo_description.pt}
-                      readOnly />
+                      onClick={getDescription} />
                   </Td>
                   <Td>
                     <Input
                       defaultValue={item.seo_title.pt}
-                      readOnly />
+                      onClick={getTitle} />
                   </Td>
                   <Td>
                     <Button>
@@ -271,62 +293,69 @@ export default function Home() {
                     </Button>
                   </Td>
                 </Tr>
-              </Tbody>
-            ))}
+              ))}
+            </Tbody>
           </Table>
         </TableContainer>
-        <FormControl
-          className='form'>
-          <Grid
-            templateColumns={{
-              lg: '2fr 2fr 1fr'
-            }}
-            gap='4'>
-            <Input
-              className='palavra-chave' />
-            <Select
-              id='select-tipo'
-              name='tipo'>
-              <option value='Portal'>
-                Type
-              </option>
-              <option value='Outros'>
-                Others
-              </option>
-              <option value='Loja'>
-                Store
-              </option>
-              <option value='Blog'>
-                Blog
-              </option>
-              <option value='Institucional'>
-                Institucional
-              </option>
-            </Select>
-            <Button
-              onClick={gerarTitleEDescription}
-              variant='button-orange'
-              _hover={{
-                bg: '#FFB596'
-              }}>
-              Generade
-            </Button>
-          </Grid>
-        </FormControl>
-        <Flex
-          className='results'
+        {/* <Flex
           flexDir={'column'}
-          gap='4'>
-          <Result
-            titulo={'H1'}
-            id={'h1-textarea'} />
-          <Result
-            titulo={'Title'}
-            id={'title-textarea'} />
-          <Result
-            titulo={'Description'}
-            id={'description-textarea'} />
-        </Flex>
+          gap='6'>
+          <Heading>
+            Generator
+          </Heading>
+          <FormControl
+            className='form'>
+            <Grid
+              templateColumns={{
+                lg: '2fr 2fr 1fr'
+              }}
+              gap='4'>
+              <Input
+                className='palavra-chave' />
+              <Select
+                id='select-tipo'
+                name='tipo'>
+                <option value='Portal'>
+                  Type
+                </option>
+                <option value='Outros'>
+                  Others
+                </option>
+                <option value='Loja'>
+                  Store
+                </option>
+                <option value='Blog'>
+                  Blog
+                </option>
+                <option value='Institucional'>
+                  Institucional
+                </option>
+              </Select>
+              <Button
+                onClick={gerarTitleEDescription}
+                variant='button-orange'
+                _hover={{
+                  bg: '#FFB596'
+                }}>
+                Generade
+              </Button>
+            </Grid>
+          </FormControl>
+          <Flex
+            className='results'
+            flexDir={'column'}
+            gap='4'>
+            <Result
+              titulo={'H1'}
+              id={'h1-textarea'} />
+            <Result
+              titulo={'Title'}
+              id={'title-textarea'} />
+            <Result
+              titulo={'Description'}
+              id={'description-textarea'} />
+          </Flex>
+        </Flex> */}
       </Flex>
     </Container>
   )
