@@ -235,6 +235,10 @@ export default function Home() {
 
   }
 
+  function changeBg(event) {
+    event.target.style.backgroundColor = '#c4c4c4';
+  }
+
   return (
     <Container
       py='6'
@@ -281,8 +285,9 @@ export default function Home() {
                   <Tr
                     key={idx}
                     _hover={{
-                      bg: '#FFADBC'
-                    }}>
+                      bg: '#c4c4c4'
+                    }}
+                    onClick={changeBg}>
                     <Td>
                       <Input
                         defaultValue={item.id}
