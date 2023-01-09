@@ -301,6 +301,10 @@ export default function Home() {
                           setName(e.target.value),
                             setId(e.target.id)
                         }}
+                        onClick={e => {
+                          setName(e.target.value),
+                            setId(e.target.id)
+                        }}
                         defaultValue={item.name.pt} />
                     </Td>
                     <Td>
@@ -310,7 +314,8 @@ export default function Home() {
                         onChange={e => {
                           setSeoTitle(e.target.value)
                         }}
-                        defaultValue={item.seo_title.pt} />
+                        defaultValue={item.seo_title.pt}
+                        readOnly />
                     </Td>
                     <Td>
                       <Input
@@ -319,17 +324,17 @@ export default function Home() {
                         onChange={e => {
                           setSeoDescription(e.target.value)
                         }}
-                        defaultValue={item.seo_description.pt} />
+                        defaultValue={item.seo_description.pt}
+                        readOnly />
                     </Td>
                     <Td>
-                      <Button>
-                        <MdSubtitles
-                          onClick={gerarTitleEDescription} />
+                      <Button onClick={gerarTitleEDescription}>
+                        <MdSubtitles />
                       </Button>
                     </Td>
                     <Td>
-                      <Button>
-                        <MdSave onClick={save} />
+                      <Button onClick={save}>
+                        <MdSave />
                       </Button>
                     </Td>
                   </Tr>
