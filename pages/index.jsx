@@ -1,13 +1,11 @@
 import { useState } from "react";
 import {
-  Box,
   Button,
   Container,
   Flex,
-  FormControl,
   Grid,
-  Heading, Input,
-  Select,
+  Heading,
+  Input,
   Table,
   TableContainer,
   Tbody,
@@ -18,9 +16,9 @@ import {
   Tr
 } from "@chakra-ui/react";
 import {
-  MdSave, MdSubtitles
+  MdSave,
+  MdSubtitles
 } from 'react-icons/md';
-import $ from 'jquery';
 
 export default function Home() {
 
@@ -71,13 +69,31 @@ export default function Home() {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+    var seoTitle_;
+    var seoDescription_;
+
+    const titleId = document.getElementsByClassName(`title-${id}`);
+    console.log(titleId);
+    const descriptionId = document.getElementsByClassName(`description-${id}`);
+    console.log(descriptionId);
+
+    for (let item of titleId) {
+      console.log(item.value);
+      seoTitle_ = item.value;
+    }
+
+    for (let item of descriptionId) {
+      console.log(item.value);
+      seoDescription_ = item.value;
+    }
+
     var raw = JSON.stringify({
       user: {
         id: id,
         name: name,
-        description: seoDescription,
-        seo_title: seoTitle,
-        seo_description: seoDescription
+        seo_description: seoDescription_,
+        seo_title: seoTitle_,
+        description: seoDescription_
       }
     });
 
@@ -96,26 +112,6 @@ export default function Home() {
       .catch(error => {
         console.log('error index', error);
       })
-  }
-
-  function getNameId(e) {
-    setId(e.target.id);
-    setName(e.target.value);
-
-    console.log(id);
-    console.log(name);
-  }
-
-  function getTitle(e) {
-    setSeoTitle(e.target.value);
-
-    console.log(seoTitle);
-  }
-
-  function getDescription(e) {
-    setSeoDescription(e.target.value);
-
-    console.log(seoDescription);
   }
 
   function randomInt(min, max) {
@@ -219,8 +215,24 @@ export default function Home() {
 
     const { title, description } = SEOContent[tipo](name);
 
-    setSeoTitle(title);
-    setSeoDescription(description);
+    console.log(id);
+
+    const titleId = document.getElementsByClassName(`title-${id}`);
+    console.log(titleId);
+
+    const descriptionId = document.getElementsByClassName(`description-${id}`);
+    console.log(descriptionId);
+
+    for (let item of titleId) {
+      console.log(item.value);
+      item.value = title;
+    }
+
+    for (let item of descriptionId) {
+      console.log(item.value);
+      item.value = description;
+    }
+
   }
 
   return (
@@ -237,8 +249,7 @@ export default function Home() {
           boxShadow='lg'
           p='4'
           borderRadius={'lg'}>
-          <Heading
-            color='#863A6F'>
+          <Heading>
             Nuvemshop API
           </Heading>
           <Flex
@@ -248,12 +259,7 @@ export default function Home() {
               Products
             </Text>
             <Button
-              onClick={listAll}
-              bg='#D989B5'
-              color='white'
-              _hover={{
-                bg: '#FFADBC'
-              }}>
+              onClick={listAll}>
               List All
             </Button>
           </Flex>
@@ -262,6 +268,7 @@ export default function Home() {
             <Table>
               <Thead>
                 <Tr>
+                  <Th>ID</Th>
                   <Th>Name</Th>
                   <Th>SEO Title</Th>
                   <Th>SEO Description</Th>
@@ -278,15 +285,23 @@ export default function Home() {
                     }}>
                     <Td>
                       <Input
+                        defaultValue={item.id}
+                        readOnly />
+                    </Td>
+                    <Td>
+                      <Input
+                        className='name'
                         id={item.id}
                         onChange={e => {
                           setName(e.target.value),
-                          setId(e.target.id)
+                            setId(e.target.id)
                         }}
                         defaultValue={item.name.pt} />
                     </Td>
                     <Td>
                       <Input
+                        id='seoTitle'
+                        className={`title-${item.id}`}
                         onChange={e => {
                           setSeoTitle(e.target.value)
                         }}
@@ -294,6 +309,8 @@ export default function Home() {
                     </Td>
                     <Td>
                       <Input
+                        id='seoDescription'
+                        className={`description-${item.id}`}
                         onChange={e => {
                           setSeoDescription(e.target.value)
                         }}
@@ -316,71 +333,6 @@ export default function Home() {
             </Table>
           </TableContainer>
         </Flex>
-        {/* <Flex
-          flexDir={'column'}
-          gap='6'
-          boxShadow='lg'
-          borderRadius={'lg'}
-          p='4'>
-          <Heading
-          color='#863A6F'>
-            Title Description Generator
-          </Heading>
-          <FormControl
-            className='form'>
-            <Grid
-              templateColumns={{
-                lg: '2fr 2fr 1fr'
-              }}
-              gap='4'>
-              <Input
-                className='palavra-chave'
-                value={name} />
-              <Select
-                id='select-tipo'
-                name='tipo'>
-                <option value='Portal'>
-                  Type
-                </option>
-                <option value='Outros'>
-                  Others
-                </option>
-                <option value='Loja'>
-                  Store
-                </option>
-                <option value='Blog'>
-                  Blog
-                </option>
-                <option value='Institucional'>
-                  Institucional
-                </option>
-              </Select>
-              <Button
-                onClick={gerarTitleEDescription}
-                bg='#D989B5'
-                color='white'
-                _hover={{
-                  bg: '#FFADBC'
-                }}>
-                Generade
-              </Button>
-            </Grid>
-          </FormControl>
-          <Flex
-            className='results'
-            flexDir={'column'}
-            gap='4'>
-            <Result
-              titulo={'H1'}
-              id={'h1-textarea'} />
-            <Result
-              titulo={'Title'}
-              id={'title-textarea'} />
-            <Result
-              titulo={'Description'}
-              id={'description-textarea'} />
-          </Flex>
-        </Flex> */}
       </Grid>
     </Container>
   )
